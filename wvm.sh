@@ -9,7 +9,7 @@ WVM_DIR=".wvm"
 
 ## Mirror list for package downloads
 declare -a WVM_MIRROR_LIST=(
-    "http://s1.smx.lt/wvm"
+    "https://warfork.com/wvm"
 )
 
 
@@ -34,7 +34,7 @@ wvm_is_sourced() {
 
 wvm_check_init() {
     if ! [[ -d "${WVM_DIR}" ]]; then
-        echo "Error: Warsow version manager is not initialized."
+        echo "Error: Warfork version manager is not initialized."
         echo "Do this so by running 'wvm init'"
         return 2
     fi
@@ -75,10 +75,10 @@ wvm_get_remote_versions() {
 
 wvm_init_server() {
     local version=`wvm_get_current_version`
-    mkdir -p profiles/${1}/basewsw
-    cat > profiles/${1}/basewsw/server.cfg <<EOF
+    mkdir -p profiles/${1}/basewf
+    cat > profiles/${1}/basewf/server.cfg <<EOF
 set sv_ip ""
-set sv_hostname "warsow server"
+set sv_hostname "warfork server"
 set sv_port "44400"
 set password ""
 
@@ -110,7 +110,7 @@ set g_instagib "0"
 set g_instajump "0"
 set g_instashield "0"
 
-set sv_defaultmap "wdm2"
+set sv_defaultmap "wfdm2"
 set g_maplist "" // list of maps in automatic rotation
 set g_maprotation "0"   // 0 = same map, 1 = in order, 2 = random
 EOF
@@ -398,7 +398,7 @@ wvm_use() {
         echo "    wvm use <version>"
         echo
         echo "Example:"
-        echo "    wvm use v1.6"
+        echo "    wvm use v2.1"
         echo "    wvm use latest"
         echo
         echo "You can get a list of installed versions with 'wvm list'"
@@ -442,7 +442,7 @@ wvm_run() {
         echo
         return 1
     fi
-    wvm_launch ${version} ${profile} warsow "${@}" || return
+    wvm_launch ${version} ${profile} warfork "${@}" || return
 }
 
 wvm_server() {
@@ -478,7 +478,7 @@ wvm_server() {
         wvm_init_server ${2}
         echo "Server '${2}' was initialized."
         echo
-        echo "Edit 'profiles/${2}/basewsw/server.cfg' config to your liking."
+        echo "Edit 'profiles/${2}/basewf/server.cfg' config to your liking."
         echo "Then you can start server with:"
         echo "    wvm server start ${2}"
         echo
@@ -508,9 +508,9 @@ wvm_server() {
             echo "Already running! (${pid})"
             return
         fi
-        wvm_launch ${version} ${profile} wsw_server \
+        wvm_launch ${version} ${profile} wf_server \
             +exec server.cfg "${@}" \
-            2>&1 >${WVM_DIR}/logs/warsow.log <&- \
+            2>&1 >${WVM_DIR}/logs/warfork.log <&- \
             & local pid=${!}
         disown ${pid}
         wvm_save_server ${profile} ${pid}
@@ -539,21 +539,21 @@ wvm_server() {
 
 wvm_help() {
     echo
-    echo "Warsow Version Manager"
+    echo "Warfork Version Manager"
     echo
     echo "Usage:"
     echo "    wvm help          Show this help message"
     echo "    wvm init          Initialize this folder to use with wvm"
     echo "    wvm list          List installed versions"
     echo "    wvm list remote   List remote versions available to install"
-    echo "    wvm install       Download and install a version of Warsow"
-    # echo "    wvm uninstall     Uninstall a version of Warsow"
-    echo "    wvm current       Show current version of Warsow"
-    echo "    wvm use           Set current version of Warsow"
-    echo "    wvm run           Run a version of Warsow"
+    echo "    wvm install       Download and install a version of Warfork"
+    # echo "    wvm uninstall     Uninstall a version of Warfork"
+    echo "    wvm current       Show current version of Warfork"
+    echo "    wvm use           Set current version of Warfork"
+    echo "    wvm run           Run a version of Warfork"
     echo "    wvm profile       Check or switch a profile"
-    echo "    wvm server        Start/stop a Warsow server"
-    # echo "    wvm tv            Start/stop a Warsow TV server"
+    echo "    wvm server        Start/stop a Warfork server"
+    # echo "    wvm tv            Start/stop a Warfork TV server"
     echo
     echo "Example:"
     echo "    wvm install latest"
